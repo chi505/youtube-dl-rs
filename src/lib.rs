@@ -225,6 +225,7 @@ pub struct YoutubeDl {
     url: String,
     process_timeout: Option<Duration>,
     extract_audio: bool,
+    download_video: bool,
     extra_args: Vec<String>,
 }
 
@@ -244,6 +245,7 @@ impl YoutubeDl {
             referer: None,
             process_timeout: None,
             extract_audio: false,
+            download_video: false,
             extra_args: Vec::new(),
         }
     }
@@ -320,6 +322,12 @@ impl YoutubeDl {
         self
     }
 
+    /// Use the `--print-json` instead of `--dump-single-json` command line flag.
+    pub fn download_video(&mut self, download_video: bool) -> &mut Self {
+        self.download_video = download_video;
+        self
+    }
+
     /// Add an additional custom CLI argument.
     ///
     /// This allows specifying arguments that are not covered by other
@@ -386,7 +394,11 @@ impl YoutubeDl {
             args.push(extra_arg);
         }
 
-        args.push("-J");
+        args.push(if self.download_video {
+            "--print-json"
+        } else {
+            "--dump-single-json"
+        });
         args.push(&self.url);
         log::debug!("youtube-dl arguments: {:?}", args);
 
