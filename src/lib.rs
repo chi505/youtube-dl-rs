@@ -402,7 +402,7 @@ impl YoutubeDl {
             "--dump-single-json"
         });
         args.push(&self.url);
-        log::debug!("youtube-dl arguments: {:?}", args);
+        println!("youtube-dl arguments: {:?}", args);
 
         args
     }
