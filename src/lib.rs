@@ -394,11 +394,13 @@ impl YoutubeDl {
             args.push(extra_arg);
         }
 
-        args.push(if self.download_video {
+        if !self.extract_audio {
+            args.push(if self.download_video {
             "--print-json"
-        } else if !self.extract_audio {
+        } else {
             "--dump-single-json"
-        } else {""});
+        });
+    }
         args.push(&self.url);
         println!("youtube-dl arguments: {:?}", args);
 
